@@ -7,7 +7,10 @@ var templates = ['**/*.json'];
 grunt.initConfig({
   mochacli: {
       options: {
-          reporter: 'spec',
+          reporter: 'mocha-junit-reporter',
+          'reporter-options': {
+            mochaFile: 'test/test-results.xml'
+          },
           bail: false
       },
       all: files
@@ -23,8 +26,7 @@ grunt.initConfig({
           src: files
       },
       options: {
-          config: '.jscsrc',
-          esnext: true
+          config: '.jscsrc'
       }
   },
   jsbeautifier: {

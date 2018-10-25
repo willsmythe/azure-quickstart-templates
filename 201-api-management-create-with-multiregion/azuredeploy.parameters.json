@@ -9,10 +9,10 @@
             "value": "templateTest"
         },
         "additionalLocation1": {
-            "value": ""
+            "value": "loc1"
         },
         "additionalLocation2": {
-            "value": ""
+            "value": "loc2"
         }
     }
 }

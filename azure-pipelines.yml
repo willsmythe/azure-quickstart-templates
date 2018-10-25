@@ -1,0 +1,30 @@
+#
+# TODO: need to update tests.js for TRAVIS_COMMIT_RANGE, TRAVIS_PULL_REQUEST
+#
+
+pool:
+  vmImage: 'Ubuntu-16.04'
+
+variables:
+  # TODO: undo these variables (just for testing)
+  VALIDATION_SKIP_DEPLOY: true
+  VALIDATION_SKIP_VALIDATE: true
+  # VALIDATE_MODIFIED_ONLY: true
+  # PARALLEL_DEPLOYMENT_NUMBER: 6
+  # VALIDATION_HOST: http://template-bot-b.centralus.cloudapp.azure.com:3000
+  
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '8.12.0'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm ci    
+    npm test
+  displayName: 'npm install and test'
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFiles: 'test/test-results.xml'    
+  condition: succeededOrFailed()

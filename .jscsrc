@@ -68,7 +68,6 @@
         "self"
     ],
     "validateIndentation": 2,
-    "validateQuoteMarks": "'",
-    "esnext": true
+    "validateQuoteMarks": "'"
 }
 

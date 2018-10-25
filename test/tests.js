@@ -92,9 +92,8 @@ function validateTemplate(requestBody, templateFilePath) {
     validatePromise = RSVP.resolve({});
   } else {
     // Calls a remote url which will validate the template and parameters
-    if (process.env.TRAVIS_PULL_REQUEST &&
-      process.env.TRAVIS_PULL_REQUEST !== 'false') {
-      requestBody.pull_request = process.env.TRAVIS_PULL_REQUEST;
+    if (process.env.SYSTEM_PULLREQUEST_PULLREQUESTNUMBER) {
+      requestBody.pull_request = process.env.SYSTEM_PULLREQUEST_PULLREQUESTNUMBER;
     }
 
     var templateObject = requestBody.template;
@@ -131,9 +130,8 @@ function deployTemplate(requestBody) {
   if (getEnvironmentVariableBoolean('VALIDATION_SKIP_DEPLOY')) {
     deployPromise = RSVP.resolve({});
   } else {
-    if (process.env.TRAVIS_PULL_REQUEST &&
-      process.env.TRAVIS_PULL_REQUEST !== 'false') {
-      requestBody.pull_request = process.env.TRAVIS_PULL_REQUEST;
+    if (process.env.SYSTEM_PULLREQUEST_PULLREQUESTNUMBER) {
+      requestBody.pull_request = process.env.SYSTEM_PULLREQUEST_PULLREQUESTNUMBER;
     }
 
     var intervalObj = timedOutput(true);
@@ -241,11 +239,10 @@ describe('Template', function () {
             var schemaValidationResult = skeemas.validate(readJSONFile(metadataFilePath), jsonSchemaObject);
 
             if (!schemaValidationResult.valid) {
-              var schemaValidationErrorMessages = '';
-              schemaValidationResult.errors.forEach(function (error) {
-                schemaValidationErrorMessages += (error.context + ':' + error.message + '\n');
+              var schemaValidationErrorMessages = schemaValidationResult.errors.map(function (error) {
+                return `${error.context}:${error.message}`;
               });
-              assert(false, schemaValidationErrorMessages);
+              assert(false, schemaValidationErrorMessages.join('\n'));
             }
           });
 
